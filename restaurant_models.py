@@ -48,16 +48,28 @@ class RestaurantDetail:
     
     Attributes:
         name (str): Name of the restaurant
-        formatted_address (str): Formatted address of the restaurant
+        formatted_address (str): Formatted address of the restaurant (Korean)
         weekday_text (List[str]): Opening hours for each day of the week
+        rating (float): Rating of the restaurant (0.0-5.0)
+        user_ratings_total (int): Total number of user ratings
+        price_level (int): Price level of the restaurant (0-4)
     """
-    def __init__(self, name: str, formatted_address: str, weekday_text: Optional[List[str]]):
+    def __init__(self, 
+                 name: str, 
+                 formatted_address: str, 
+                 weekday_text: Optional[List[str]],
+                 rating: Optional[float] = None,
+                 user_ratings_total: Optional[int] = None,
+                 price_level: Optional[int] = None):
         self.name = name
         self.formatted_address = formatted_address
         self.weekday_text = weekday_text if weekday_text else []
+        self.rating = rating
+        self.user_ratings_total = user_ratings_total
+        self.price_level = price_level
         
     def __str__(self) -> str:
-        return f"RestaurantDetail(name='{self.name}', address='{self.formatted_address},weekday_text='{self.weekday_text},')"
+        return f"RestaurantDetail(name='{self.name}', address='{self.formatted_address}',weekday_text='{self.weekday_text}', rating={self.rating})"
     
     def __repr__(self) -> str:
         return self.__str__()
@@ -67,7 +79,10 @@ class RestaurantDetail:
         return {
             "name": self.name,
             "formatted_address": self.formatted_address,
-            "weekday_text": self.weekday_text
+            "weekday_text": self.weekday_text,
+            "rating": self.rating,
+            "user_ratings_total": self.user_ratings_total,
+            "price_level": self.price_level
         }
         
     @classmethod
@@ -76,5 +91,8 @@ class RestaurantDetail:
         name = detail_data.get("name", "")
         formatted_address = detail_data.get("formatted_address", "")
         weekday_text = detail_data.get("opening_hours", {}).get("weekday_text")
+        rating = detail_data.get("rating")
+        user_ratings_total = detail_data.get("user_ratings_total")
+        price_level = detail_data.get("price_level")
         
-        return cls(name, formatted_address, weekday_text) 
+        return cls(name, formatted_address, weekday_text, rating, user_ratings_total, price_level) 
